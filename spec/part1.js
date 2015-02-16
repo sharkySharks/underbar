@@ -4,6 +4,8 @@
   describe('Part I', function() {
 
     describe('identity', function() {
+       _.identity = function(obj) {return obj;};
+
       var uniqueObject = {};
 
       it('should return whatever value is passed into it', function() {
@@ -33,6 +35,15 @@
     });
 
     describe('last', function() {
+      _.last = function(array, x){ 
+        if (x === undefined){
+            return array[array.length-1];
+        } else if (x === 0){
+            return [];
+        } else {
+            return array.slice(-x);
+        }};
+
       it('should pull the last element from an array', function() {
         expect(_.last([1,2,3])).to.equal(3);
       });
@@ -52,6 +63,18 @@
 
     describe('each', function() {
       it('should iterate over arrays, providing access to the element, index, and array itself', function() {
+        _.each = function (col, it) {
+          if (Array.isArray(col)){
+            for(var i=0; i<col.length; i++){
+              it(col[i],i,col);
+            }
+          } else {
+            for(var prop in col){
+              it(col[prop],prop,col);
+            }
+          }
+        }
+
         var animals = ['ant', 'bat', 'cat'];
         var iterationInputs = [];
 
@@ -126,6 +149,16 @@
     });
 
     describe('filter', function() {
+        
+        _.filter = function (list, pred) {
+          var pass = [];
+          for(var i=0; i<list.length; i++){
+            if (pred(list[i])){
+              pass.push(list[i])
+            }
+          } return pass;
+        };
+
       it('should return all even numbers in an array', function() {
         var isEven = function(num) { return num % 2 === 0; };
         var evens = _.filter([1, 2, 3, 4, 5, 6], isEven);
@@ -150,6 +183,15 @@
     });
 
     describe('reject', function() {
+      _.reject = function(list, pred) {
+        var rejects = [];
+        for (var i=0; i<list.length; i++){
+          if (!pred(list[i])){
+            rejects.push(list[i])
+          }
+        } return rejects;
+      };
+
       it('should reject all even numbers', function() {
         var isEven = function(num) { return num % 2 === 0; };
         var odds = _.reject([1, 2, 3, 4, 5, 6], isEven);
