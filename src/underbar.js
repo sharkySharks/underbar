@@ -22,7 +22,7 @@
    *
    * The .first function is implemented for you, to help guide you toward success
    * in your work on the following functions. Whenever you see a portion of the
-   * assignment pre-completed, be sure to read and understanding it fully before
+   * assignment pre-completed, be sure to read and understand it fully before
    * you proceed. Skipping this step will lead to considerably more difficulty
    * implementing the sections you are responsible for.
    */
@@ -209,6 +209,28 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    
+    if (collection.length === 0) { 
+      return true; 
+    }
+    if (iterator === undefined){
+      iterator = _.identity
+    }
+    for (var i=0; i<collection.length; i++){
+      if (!iterator(collection[i]) || iterator(collection[i]) === undefined){
+        return false;
+      } 
+    }
+
+    var result = _.reduce(collection, function(item){
+      console.log("iterator: " + iterator + " - item " + typeof item + " -collection: " + collection );
+        return iterator(item);
+//second iteration is iterating throught 'true' instead of the second value of the array????
+
+    },true);
+    console.log("result: " + Boolean(result) + " for " + collection);
+    return Boolean(result);
+
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -237,11 +259,24 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for (var i = 1; i < arguments.length; i++){
+      for (var prop in arguments[i]){
+        obj[prop] = arguments[i][prop];
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    for (var i = 1; i < arguments.length; i++){
+      for (var prop in arguments[i]){
+        if (!obj.hasOwnProperty(prop))
+        obj[prop] = arguments[i][prop];
+      }
+    }
+    return obj;
   };
 
 
