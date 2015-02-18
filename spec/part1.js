@@ -187,6 +187,7 @@
         var numbers = [1, 2, 2, 3, 4, 4];
 
         expect(_.uniq(numbers, true, iterator)).to.eql([1, 2, 3, 4]);
+        // last test should be [2,3,4,5] since there is an addition function being called
       });
 
       it('should produce a brand new array instead of modifying the input array', function() {
