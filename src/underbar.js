@@ -216,27 +216,30 @@
     if (iterator === undefined){
       iterator = _.identity
     }
-    for (var i=0; i<collection.length; i++){
-      if (!iterator(collection[i]) || iterator(collection[i]) === undefined){
+    for (var i in collection) {
+      if (!!iterator(collection[i]) == false) {
         return false;
-      } 
-    }
-
-    var result = _.reduce(collection, function(item){
-      console.log("iterator: " + iterator + " - item " + typeof item + " -collection: " + collection );
-        return iterator(item);
-//second iteration is iterating throught 'true' instead of the second value of the array????
-
-    },true);
-    console.log("result: " + Boolean(result) + " for " + collection);
-    return Boolean(result);
-
+      }
+    } 
+    return true;
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (collection.length === 0) { 
+      return false; 
+    }
+    if (iterator === undefined){
+      iterator = _.identity
+    }
+    for (var i in collection) {
+      if (!!iterator(collection[i]) == true) {
+        return true;
+      }
+    } 
+    return false;
   };
 
 
@@ -311,7 +314,7 @@
     };
   };
 
-  // Memorize an expensive function's results by storing them. You may assume
+  // Memoize an expensive function's results by storing them. You may assume
   // that the function takes only one argument and that it is a primitive.
   // memoize could be renamed to oncePerUniqueArgumentList; memoize does the
   // same thing as once, but based on many sets of unique arguments.
@@ -320,7 +323,18 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var cache = {};
+
+    return function(prop){
+      if (cache.hasOwnProperty(prop)){
+        return cache[prop];
+      } else {
+        cache[prop] = func.apply(this, arguments);
+        return cache[prop];
+      }
+    };
   };
+
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -329,6 +343,10 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = slice.call(arguments, 2);
+    return setTimeout(function() { 
+      return func.apply(null, args); 
+    }, wait);
   };
 
 
@@ -343,6 +361,8 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+
+
   };
 
 
