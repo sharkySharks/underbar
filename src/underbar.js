@@ -345,7 +345,7 @@
   _.delay = function(func, wait) {
     var args = Array.prototype.slice.call(arguments, 2);
     return setTimeout(function() { 
-      return func.apply(null, args); 
+      return func.apply(this, args); 
     }, wait);
   };
 
